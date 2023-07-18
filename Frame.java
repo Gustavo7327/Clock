@@ -27,7 +27,7 @@ public class Frame extends JFrame {
         dayLabel.setForeground(Color.green);
 
         dateLabel = new JLabel();
-        dateLabel.setFont(new Font("Ink Free",Font.PLAIN,25));
+        dateLabel.setFont(new Font("Ink Free",Font.PLAIN,28));
         dateLabel.setForeground(Color.green);
 
         timeLabel = new JLabel();
