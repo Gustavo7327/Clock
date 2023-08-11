@@ -6,8 +6,10 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Frame extends JFrame {
+public class Frame extends JFrame implements ActionListener{
     JTextField timeField;
+    JTextField minuteField;
+    JTextField secondField;
     JButton button;
     JLabel dayLabel;
     JLabel dateLabel;
@@ -19,30 +21,35 @@ public class Frame extends JFrame {
     String day;
     String date;
     boolean booleanButton;
+    JMenuBar menubar;
+    JMenu menu;
+    JMenuItem menuitem;
     Frame() {
         
+        menubar = new JMenuBar();
+        menu = new JMenu("Options");
+        menuitem = new JMenuItem("Stopwatch");
+        menuitem.addActionListener(this);
+        menubar.add(menu);
+        menu.add(menuitem);
+        menubar.setBackground(Color.black);
+        menubar.setForeground(Color.green);
+        menu.setBackground(Color.black);
+        menu.setForeground(Color.green);
+        menuitem.setBackground(Color.black);
+        menuitem.setForeground(Color.green);
+
         timeField = new JTextField();
-        timeField.setPreferredSize(new Dimension(110,22));
+        minuteField = new JTextField();
+        secondField = new JTextField();
+        timeField.setPreferredSize(new Dimension(70,22));
+        minuteField.setPreferredSize(new Dimension(70,22));
+        secondField.setPreferredSize(new Dimension(70,22));
         booleanButton = true;
         button = new JButton();
         button.setText("Definir Alarme");
         button.setPreferredSize(new Dimension(200,25));
-        button.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(e.getSource()==button && booleanButton == true){
-                    timeField.setEditable(false);
-                    button.setText("Redefinir Alarme");
-                    booleanButton = false; 
-                } else if(e.getSource()==button && booleanButton==false){
-                    timeField.setEditable(true);
-                    button.setText("Definir Alarme");
-                    booleanButton = true; 
-                }
-                
-            } 
-        });
+        button.addActionListener(this);
         
         timeFormat = new SimpleDateFormat("HH:mm:ss");
         dayFormat = new SimpleDateFormat("EEEEE");
@@ -62,15 +69,18 @@ public class Frame extends JFrame {
         
         this.setTitle("Clock :)");
         this.getContentPane().setBackground(Color.black);
+        this.setJMenuBar(menubar);
         this.add(timeLabel);
         this.add(dateLabel);
         this.add(dayLabel);
         this.add(timeField);
+        this.add(minuteField);
+        this.add(secondField);
         this.add(button);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new FlowLayout());
         this.setResizable(false);
-        this.setSize(350,260);
+        this.setSize(310,280);
         this.setVisible(true);
 
         setTime();
@@ -87,8 +97,8 @@ public class Frame extends JFrame {
 
             date = dateFormat.format(Calendar.getInstance().getTime());
             dateLabel.setText(date);
-
-            if(timeField.getText().equals(time)){
+            String comparation = timeField.getText()+":"+minuteField.getText()+":"+secondField.getText();
+            if(comparation.equals(time)){
         try {
             tocarAlarme();
         } catch (UnsupportedAudioFileException e1) {
@@ -112,5 +122,25 @@ public class Frame extends JFrame {
         Clip clip = AudioSystem.getClip();
         clip.open(audioStream);
         clip.start();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==menuitem){
+            new Stopwatch();
+        }
+        if(e.getSource()==button && booleanButton == true){
+            timeField.setEditable(false);
+            minuteField.setEditable(false);
+            secondField.setEditable(false);
+            button.setText("Redefinir Alarme");
+            booleanButton = false; 
+        } else if(e.getSource()==button && booleanButton==false){
+            timeField.setEditable(true);
+            minuteField.setEditable(true);
+            secondField.setEditable(true);
+            button.setText("Definir Alarme");
+            booleanButton = true; 
+        }      
     }
 }
