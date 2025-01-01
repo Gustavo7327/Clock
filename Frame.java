@@ -109,7 +109,8 @@ public class Frame extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         
-        setTime();
+        Thread clockThread = new Thread(() -> setTime());
+        clockThread.start();
     }
 
     public void setTime() {
