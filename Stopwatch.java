@@ -11,6 +11,7 @@ public class Stopwatch extends JFrame implements ActionListener {
     JMenuBar menubar;
     JMenu menu;
     JMenuItem menuitem;
+    JMenuItem menuitem2;
 
     int seconds = 0;
     int minutes = 0;
@@ -24,15 +25,20 @@ public class Stopwatch extends JFrame implements ActionListener {
         menubar = new JMenuBar();
         menu = new JMenu("Options");
         menuitem = new JMenuItem("Clock");
+        menuitem2 = new JMenuItem("TimerClock");
         menuitem.addActionListener(this);
+        menuitem2.addActionListener(this);
         menubar.add(menu);
         menu.add(menuitem);
+        menu.add(menuitem2);
         menubar.setBackground(Color.black);
         menubar.setForeground(Color.green);
         menu.setBackground(Color.black);
         menu.setForeground(Color.green);
         menuitem.setBackground(Color.black);
         menuitem.setForeground(Color.green);
+        menuitem2.setBackground(Color.black);
+        menuitem2.setForeground(Color.green);
 
         this.setTitle("Stopwatch");
         this.getContentPane().setBackground(Color.black);
@@ -84,6 +90,11 @@ public class Stopwatch extends JFrame implements ActionListener {
                 timer.cancel();
             }
             new Frame();
+            this.dispose();
+        }
+
+        if (e.getSource() == menuitem2) {
+            new TimerClock();
             this.dispose();
         }
 

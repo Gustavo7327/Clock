@@ -24,21 +24,27 @@ public class Frame extends JFrame implements ActionListener {
     JMenuBar menubar;
     JMenu menu;
     JMenuItem menuitem;
+    JMenuItem menuitem2;
 
     Frame() {
 
         menubar = new JMenuBar();
         menu = new JMenu("Options");
         menuitem = new JMenuItem("Stopwatch");
+        menuitem2 = new JMenuItem("TimerClock");
         menuitem.addActionListener(this);
+        menuitem2.addActionListener(this);
         menubar.add(menu);
         menu.add(menuitem);
+        menu.add(menuitem2);
         menubar.setBackground(Color.black);
         menubar.setForeground(Color.green);
         menu.setBackground(Color.black);
         menu.setForeground(Color.green);
         menuitem.setBackground(Color.black);
         menuitem.setForeground(Color.green);
+        menuitem2.setBackground(Color.black);
+        menuitem2.setForeground(Color.green);
 
         timeField = new JTextField();
         timeField.setPreferredSize(new Dimension(150, 30));
@@ -155,6 +161,11 @@ public class Frame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == menuitem) {
             new Stopwatch();
+            this.dispose();
+        }
+
+        if (e.getSource() == menuitem2) {
+            new TimerClock();
             this.dispose();
         }
 
