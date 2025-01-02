@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.TimerTask;
+import java.util.Timer;
 import javax.swing.*;
 
 public class TimerClock extends JFrame implements ActionListener{
@@ -93,6 +95,49 @@ public class TimerClock extends JFrame implements ActionListener{
             new Stopwatch();
             this.dispose();
         }
+
+        if(e.getSource() == startButton){
+            if(!running){
+                try{
+                    hours = Integer.parseInt(hourField.getText());
+                    minutes = Integer.parseInt(minuteField.getText());
+                    seconds = Integer.parseInt(secondField.getText());
+
+                    if(hours < 0 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59){
+                        JOptionPane.showMessageDialog(this, "Please enter valid numbers", "Error", JOptionPane.ERROR_MESSAGE);
+                    } 
+                    running = true;
+                    startTimer();
+                    hourField.setEditable(false);
+                    minuteField.setEditable(false);
+                    secondField.setEditable(false);
+
+                } catch(NumberFormatException n){
+                    JOptionPane.showMessageDialog(this, "Please enter only numbers", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+        if(e.getSource() == pauseButton){
+            running = false;
+            if(timer != null){
+                timer.cancel();
+            }
+        }
+
+        if(e.getSource() == resetButton){
+            running = false;
+            if(timer != null){
+                timer.cancel();
+            }
+            hours = 0;
+            minutes = 0;
+            seconds = 0;
+            hourField.setEditable(true);
+            minuteField.setEditable(true);
+            secondField.setEditable(true);
+            timerLabel.setText(formatTime(hours, minutes, seconds));
+        }
     }
 
     private JTextField createInputField() {
@@ -119,6 +164,36 @@ public class TimerClock extends JFrame implements ActionListener{
 
     private String formatTime(int hours, int minutes, int seconds) {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    private void startTimer() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (running) {
+                    if (seconds == 0) {
+                        if(minutes == 0){
+                            if(hours == 0){
+                                running = false;
+                                timer.cancel();
+                                JOptionPane.showMessageDialog(null, "Time's up!", "Timer", JOptionPane.INFORMATION_MESSAGE);
+                            } else{
+                                hours--;
+                                minutes = 59;
+                                seconds = 59;
+                            }
+                        } else{
+                            minutes--;
+                            seconds = 59;
+                        }
+                    } else{
+                        seconds--;
+                    }
+                    timerLabel.setText(formatTime(hours, minutes, seconds));
+                }
+            }
+        }, 0, 1000);
     }
     
 }
